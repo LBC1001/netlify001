@@ -1,0 +1,7 @@
+{
+  "name": "teal-sprite-1e1e06",
+  "type": "module",
+  "dependencies": {
+    "@netlify/blobs": "latest"
+  }
+}
