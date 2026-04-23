@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Redirecting to payment...</title>
+</head>
+<body>
+  <p>Redirecting to payment...</p>
+
+  <script>
+    async function go() {
+      const params = new URLSearchParams(window.location.search);
+      const submissionId = params.get("submission_id");
+
+      if (!submissionId) {
+        document.body.innerHTML = "<p>Missing submission_id.</p>";
+        return;
+      }
+
+      try {
+        const response = await fetch(
+          `/.netlify/functions/get-checkout-url?submission_id=${encodeURIComponent(submissionId)}`
+        );
+
+        const data = await response.json();
+
+        if (!data.checkout_url) {
+          document.body.innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+          return;
+        }
+
+        window.location.href = data.checkout_url;
+      } catch (error) {
+        document.body.innerHTML = `<pre>${String(error)}</pre>`;
+      }
+    }
+
+    go();
+  </script>
+</body>
+</html>
